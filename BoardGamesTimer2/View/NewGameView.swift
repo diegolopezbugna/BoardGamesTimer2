@@ -45,9 +45,13 @@ struct NewGameView: View {
         }
         .onChange(of: game.playersCount) { oldValue, newValue in
             if newValue > oldValue {
-                game.addPlayerColor()
+                withAnimation {
+                    game.addPlayerColor()
+                }
             } else {
-                game.removePlayerColor()
+                withAnimation {
+                    game.removePlayerColor()
+                }
             }
         }
         .padding(20)

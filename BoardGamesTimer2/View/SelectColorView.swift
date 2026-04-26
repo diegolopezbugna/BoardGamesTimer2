@@ -16,7 +16,9 @@ struct SelectColorView: View {
             Button("<") {
                 let i = colors.firstIndex(of: selectedColor) ?? 0
                 if i > 0 {
-                    selectedColor = colors[i - 1]
+                    withAnimation(.linear(duration: 0.1)) {
+                        selectedColor = colors[i - 1]
+                    }
                 }
             }
             .fontWeight(.bold)
@@ -29,7 +31,9 @@ struct SelectColorView: View {
             Button(">") {
                 let i = colors.firstIndex(of: selectedColor) ?? 0
                 if i < colors.count - 1 {
-                    selectedColor = colors[i + 1]
+                    withAnimation(.linear(duration: 0.1)) {
+                        selectedColor = colors[i + 1]
+                    }
                 }
             }
             .fontWeight(.bold)
