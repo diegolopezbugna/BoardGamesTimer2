@@ -9,8 +9,8 @@ import Foundation
 enum GameType: String, CaseIterable, Identifiable {
     var id: Self { self }
     
-    case incremental = "Inc"
-    case initialPlusTurnTimerPerPlayer = "Initial +"
+    case incremental = "Incremental"
+    case initialPlusTurnTimerPerPlayer = "Initial + turn"
 }
 
 struct InitialPlusTurnTimerPerPlayerGameType {

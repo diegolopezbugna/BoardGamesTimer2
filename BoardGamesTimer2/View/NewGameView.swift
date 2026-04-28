@@ -8,53 +8,64 @@
 import SwiftUI
 
 struct NewGameView: View {
-    @Bindable var game: Game
+    @State var game: Game
     
     var body: some View {
-        VStack {
-            HStack {
-                Text("Game type")
-                    .fontWeight(.semibold)
-                Picker("Game Type", selection: $game.gameType) {
-                    ForEach(GameType.allCases) { option in
-                        Text(option.rawValue)
+        NavigationStack{
+            VStack {
+                HStack {
+                    Text("Game type")
+                        .fontWeight(.semibold)
+                    Picker("Game Type", selection: $game.gameType) {
+                        ForEach(GameType.allCases) { option in
+                            Text(option.rawValue)
+                        }
+                    }
+                }
+                .padding(10)
+                if game.gameType == .initialPlusTurnTimerPerPlayer {
+                    InitialPlusNewGameView(initialTime: $game.initialTime, perPlayerTime: $game.perPlayerTime)
+                } else {
+                    IncrementalNewGameView()
+                }
+                VStack {
+                    Text("\(game.playersCount) Players")
+                        .fontWeight(.semibold)
+                    Stepper("", value: $game.playersCount, in: 2...game.maxPlayers)
+                        .labelsHidden()
+                }
+                .padding(EdgeInsets(top: 30, leading: 0, bottom: 10, trailing: 0))
+                VStack {
+                    ForEach(1...game.playerColors.count, id: \.self) { index in
+                        let pc = $game.playerColors[index - 1].bgColor
+                        SelectColorView(colors: game.colors, selectedColor: pc)
+                    }
+                }
+                .padding(EdgeInsets(top: 0, leading: 20, bottom: 0, trailing: 20))
+                Spacer()
+            }
+            .navigationTitle("New Game")
+            .toolbar {
+                ToolbarItem(placement: .topBarTrailing) {
+                    NavigationLink("Start") {
+                        GameInProgressView(game: $game)
                     }
                 }
             }
-            .padding(10)
-            if game.gameType == .initialPlusTurnTimerPerPlayer {
-                InitialPlusNewGameView(initialTime: $game.initialTime, perPlayerTime: $game.perPlayerTime)
-            } else {
-                IncrementalNewGameView()
-            }
-            VStack {
-                Text("\(game.playersCount) Players")
-                    .fontWeight(.semibold)
-                Stepper("", value: $game.playersCount, in: 2...game.maxPlayers)
-                    .labelsHidden()
-            }
-            .padding(EdgeInsets(top: 30, leading: 0, bottom: 10, trailing: 0))
-            VStack {
-                ForEach(1...game.playerColors.count, id: \.self) { index in
-                    let pc = $game.playerColors[index - 1].bgColor
-                    SelectColorView(colors: game.colors, selectedColor: pc)
+            .onChange(of: game.playersCount) { oldValue, newValue in
+                if newValue > oldValue {
+                    withAnimation {
+                        game.addPlayerColor()
+                    }
+                } else {
+                    withAnimation {
+                        game.removePlayerColor()
+                    }
                 }
             }
-            .padding(EdgeInsets(top: 0, leading: 20, bottom: 0, trailing: 20))
-            Spacer()
+            .padding(20)
+            
         }
-        .onChange(of: game.playersCount) { oldValue, newValue in
-            if newValue > oldValue {
-                withAnimation {
-                    game.addPlayerColor()
-                }
-            } else {
-                withAnimation {
-                    game.removePlayerColor()
-                }
-            }
-        }
-        .padding(20)
     }
 }
 
