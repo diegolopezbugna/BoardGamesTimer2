@@ -32,7 +32,7 @@ struct GameInProgressView: View {
                 LazyVGrid(columns: columns, spacing: 0) {
                     ForEach($game.playerColors) { $playerColor in
                         ProgressPlayerView(playerColor: playerColor,
-                                           time: TimeInterval(game.initialTime),
+                                           time: TimeInterval(game.gameType == GameType.initialPlusTurnTimerPerPlayer ? game.initialTime : 0),
                                            gameType: game.gameType,
                                            isPlaying: false)
                         .frame(height: rowHeight)

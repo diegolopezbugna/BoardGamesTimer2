@@ -7,7 +7,7 @@
 import Foundation
 import SwiftUI
 
-struct PlayerColor : Identifiable {
+struct PlayerColor : Identifiable, Equatable {
     let id: UUID = UUID()
     
     var name: String
@@ -18,12 +18,10 @@ struct PlayerColor : Identifiable {
 
 @Observable
 class Game {
-    var gameType: GameType = .initialPlusTurnTimerPerPlayer
+    var gameType: GameType = .incremental
     
     var initialTime = InitialPlusTurnTimerPerPlayerGameType.defaultInitialTime
     var perPlayerTime = InitialPlusTurnTimerPerPlayerGameType.defaultPerPlayerTime
-    
-    var playersCount: Int = 2
     
     let availablePlayerColors = [
         PlayerColor(name: "Red", textColor: Color.white, bgColor: Color(red: 0.6, green: 0, blue: 0), bgColor2: Color(red: 1, green: 0, blue: 0)),
@@ -39,14 +37,10 @@ class Game {
     
     var playerColors: [PlayerColor]
     
-    var colors: [Color] {
-        availablePlayerColors.map(\.bgColor)
-    }
-    
     let maxPlayers = 8
 
     init() {
-        playerColors = [availablePlayerColors[0], availablePlayerColors[1]]
+        playerColors = Array(availablePlayerColors.prefix(4))
     }
 
     func addPlayerColor() {
