@@ -35,23 +35,26 @@ class Game {
         PlayerColor(name: "Brown", textColor: Color.white, bgColor: Color.brown, bgColor2: Color(red: 0.9, green: 0.7, blue: 0.5)),
         ]
     
-    var playerColors: [PlayerColor]
+    var players: [Player]
     
     let maxPlayers = 8
 
     init() {
-        playerColors = Array(availablePlayerColors.prefix(2))
+        players = []
+        for pc in availablePlayerColors.prefix(4) {
+            players.append(Player(playerColor: pc))
+        }
     }
 
-    func addPlayerColor() {
-        if playerColors.count < availablePlayerColors.count {
-            playerColors.append(availablePlayerColors[playerColors.count])
+    func addPlayer() {
+        if players.count < availablePlayerColors.count {
+            players.append(Player(playerColor: availablePlayerColors[players.count]))
         }
     }
     
-    func removePlayerColor() {
-        if playerColors.count > 0 {
-            playerColors.removeLast()
+    func removePlayer() {
+        if players.count > 0 {
+            players.removeLast()
         }
     }
 }

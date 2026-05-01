@@ -14,7 +14,7 @@ struct NewGameView: View {
     
     init(game: Game) {
         self.game = game
-        self.playersCount = game.playerColors.count
+        self.playersCount = game.players.count
     }
     
     var body: some View {
@@ -69,8 +69,8 @@ struct NewGameView: View {
                 
                 ScrollView {
                     VStack {
-                        ForEach($game.playerColors) { $playerColor in
-                            SelectPlayerColorView(game: game, selected: $playerColor)
+                        ForEach($game.players) { $player in
+                            SelectPlayerColorView(game: game, selected: $player.playerColor)
                         }
                     }
                     .padding(EdgeInsets(top: 0, leading: 20, bottom: 0, trailing: 20))
@@ -88,11 +88,11 @@ struct NewGameView: View {
             .onChange(of: playersCount) { oldValue, newValue in
                 if newValue > oldValue {
                     withAnimation {
-                        game.addPlayerColor()
+                        game.addPlayer()
                     }
                 } else {
                     withAnimation {
-                        game.removePlayerColor()
+                        game.removePlayer()
                     }
                 }
             }

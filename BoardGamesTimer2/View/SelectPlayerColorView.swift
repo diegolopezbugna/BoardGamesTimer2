@@ -13,7 +13,7 @@ struct SelectPlayerColorView: View {
     
     var remainingPlayerColors: [PlayerColor] {
         game.availablePlayerColors.filter { pc in
-            !game.playerColors.contains(pc) || pc == selected
+            !game.players.map(\.playerColor).contains(pc) || pc == selected
         }
     }
     

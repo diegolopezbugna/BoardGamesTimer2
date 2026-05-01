@@ -18,14 +18,14 @@ struct GameInProgressView: View {
     }
     
     var rows: Int {
-        if $game.playerColors.count < 4 {
-            isLandscape ? 1 : $game.playerColors.count
+        if $game.players.count < 4 {
+            isLandscape ? 1 : $game.players.count
         } else {
-            isLandscape ? 2 : $game.playerColors.count / 2 + $game.playerColors.count % 2
+            isLandscape ? 2 : $game.players.count / 2 + $game.players.count % 2
         }
     }
     var columns: Int {
-        Int(ceil(Double($game.playerColors.count) / Double(rows)))
+        Int(ceil(Double($game.players.count) / Double(rows)))
     }
 
     enum NavigationDestinations {
@@ -39,8 +39,8 @@ struct GameInProgressView: View {
                 let rowHeight = fullHeight / CGFloat(rows)
                 let column = GridItem(.flexible(), spacing: 0)
                 LazyVGrid(columns: Array(repeating: column, count: columns), spacing: 0) {
-                    ForEach($game.playerColors) { $playerColor in
-                        ProgressPlayerView(playerColor: playerColor,
+                    ForEach($game.players) { $player in
+                        ProgressPlayerView(playerColor: player.playerColor,
                                            time: TimeInterval(game.gameType == GameType.initialPlusTurnTimerPerPlayer ? game.initialTime : 0),
                                            gameType: game.gameType,
                                            isPlaying: false)
