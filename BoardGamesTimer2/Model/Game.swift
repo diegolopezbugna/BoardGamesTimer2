@@ -40,7 +40,7 @@ class Game {
     let maxPlayers = 8
 
     init() {
-        playerColors = Array(availablePlayerColors.prefix(4))
+        playerColors = Array(availablePlayerColors.prefix(2))
     }
 
     func addPlayerColor() {
