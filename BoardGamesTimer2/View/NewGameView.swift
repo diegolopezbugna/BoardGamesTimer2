@@ -81,7 +81,7 @@ struct NewGameView: View {
             .toolbar {
                 ToolbarItem(placement: .topBarTrailing) {
                     NavigationLink("Start") {
-                        GameInProgressView(game: $game)
+                        GameInProgressView(game: game)
                     }
                 }
             }

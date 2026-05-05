@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct GameInProgressView: View {
-    @Binding var game: Game
+    @Bindable var game: Game
     @State var endConfirmating = false
     @State var shouldNavigateToEndGame = false
     @Environment(\.verticalSizeClass) var sizeClass
@@ -78,5 +78,5 @@ struct GameInProgressView: View {
 
 #Preview {
     var game = Game()
-    GameInProgressView(game: .constant(game))
+    GameInProgressView(game: game)
 }

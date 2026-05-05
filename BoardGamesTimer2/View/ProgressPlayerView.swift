@@ -9,7 +9,7 @@ import SwiftUI
 internal import Combine
 
 struct ProgressPlayerView: View {
-    @Binding var game: Game
+    @Bindable var game: Game
     @Binding var player: Player
     @State var bgColor: Color
 
@@ -44,7 +44,7 @@ struct ProgressPlayerView: View {
         }
     }
     
-    init(game: Binding<Game>, player: Binding<Player>) {
+    init(game: Bindable<Game>, player: Binding<Player>) {
         self._game = game
         self._player = player
         self.bgColor = player.playerColor.bgColor.wrappedValue
@@ -52,7 +52,6 @@ struct ProgressPlayerView: View {
 }
 
 #Preview {
-    let g = Game()
-    let p = g.players[0]
-    ProgressPlayerView(game: .constant(g), player: .constant(p))
+    @Previewable @Bindable var g = Game()
+    ProgressPlayerView(game: _g, player: .constant(g.players[0]))
 }
