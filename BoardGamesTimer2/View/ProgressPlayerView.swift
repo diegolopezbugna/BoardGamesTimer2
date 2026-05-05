@@ -9,52 +9,50 @@ import SwiftUI
 internal import Combine
 
 struct ProgressPlayerView: View {
-    var playerColor: PlayerColor
-    @State var time: TimeInterval
-    @State var gameType: GameType
-    @State var isPlaying: Bool
-    
+    @Binding var game: Game
+    @Binding var player: Player
     @State var bgColor: Color
+
     let timer = Timer.publish(every: 1, on: .main, in: .common).autoconnect()
     
     var body: some View {
         ZStack {
             Rectangle()
                 .fill(bgColor)
-            Text("\(time.toString(showMs: false))")
-                .foregroundStyle(playerColor.textColor)
+            Text("\(player.time.toString(showMs: false))")
+                .foregroundStyle(player.playerColor.textColor)
                 .font(.custom("Verdana", size: 44))
                 .onReceive(timer) { output in
-                    if isPlaying {
-                        time += gameType == .incremental ? 1.0 : -1.0
+                    if player.isPlaying {
+                        player.time += game.gameType == .incremental ? 1.0 : -1.0
                         withAnimation(.linear(duration: 0.5), ) {
-                            self.bgColor = playerColor.bgColor2
+                            self.bgColor = player.playerColor.bgColor2
                         } completion: {
                             withAnimation(.linear(duration: 0.5)) {
-                                self.bgColor = playerColor.bgColor
+                                self.bgColor = player.playerColor.bgColor
                             }
                         }
                     }
                 }
         }
         .onTapGesture {
-            isPlaying = !isPlaying
+            if player.isPlaying {
+                player.isPlaying = false
+            } else {
+                game.changePlayingPlayer(player)
+            }
         }
     }
     
-    init(playerColor: PlayerColor, time: TimeInterval, gameType: GameType, isPlaying: Bool) {
-        self.playerColor = playerColor
-        self.time = time
-        self.gameType = gameType
-        self.isPlaying = isPlaying
-        self.bgColor = playerColor.bgColor
+    init(game: Binding<Game>, player: Binding<Player>) {
+        self._game = game
+        self._player = player
+        self.bgColor = player.playerColor.bgColor.wrappedValue
     }
 }
 
 #Preview {
     let g = Game()
-    let pc = g.availablePlayerColors[0]
-    ProgressPlayerView(playerColor: pc, time: TimeInterval(g.initialTime),
-                       gameType: g.gameType,
-                       isPlaying: false)
+    let p = g.players[0]
+    ProgressPlayerView(game: .constant(g), player: .constant(p))
 }

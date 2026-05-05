@@ -8,7 +8,11 @@
 import Foundation
 
 @Observable
-class Player: Identifiable {
+class Player: Identifiable, Equatable {
+    static func == (lhs: Player, rhs: Player) -> Bool {
+        lhs.id == rhs.id
+    }
+    
     var id = UUID()
     var playerColor: PlayerColor
     var time: TimeInterval = 0.0

@@ -39,11 +39,8 @@ struct GameInProgressView: View {
                 let rowHeight = fullHeight / CGFloat(rows)
                 let column = GridItem(.flexible(), spacing: 0)
                 LazyVGrid(columns: Array(repeating: column, count: columns), spacing: 0) {
-                    ForEach($game.players) { $player in
-                        ProgressPlayerView(playerColor: player.playerColor,
-                                           time: TimeInterval(game.gameType == GameType.initialPlusTurnTimerPerPlayer ? game.initialTime : 0),
-                                           gameType: game.gameType,
-                                           isPlaying: false)
+                    ForEach($game.players) { player in
+                        ProgressPlayerView(game: $game, player: player)
                         .frame(height: rowHeight)
                     }
                 }
@@ -71,6 +68,10 @@ struct GameInProgressView: View {
         }
         .navigationDestination(isPresented: $shouldNavigateToEndGame) {
             GameResultView()
+        }
+        .onChange(of: game.players, initial: false) { oldValue, newValue in
+            print(oldValue)
+            print(newValue)
         }
     }
 }

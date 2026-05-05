@@ -57,4 +57,11 @@ class Game {
             players.removeLast()
         }
     }
+    
+    func changePlayingPlayer(_ player: Player) {
+        players.forEach { player in
+            player.isPlaying = false
+        }
+        player.isPlaying = true
+    }
 }
