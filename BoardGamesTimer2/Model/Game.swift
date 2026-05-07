@@ -37,6 +37,7 @@ class Game {
     
     var players: [Player]
     
+    let minPlayers = 2
     let maxPlayers = 8
 
     init() {
@@ -47,13 +48,13 @@ class Game {
     }
 
     func addPlayer() {
-        if players.count < availablePlayerColors.count {
+        if players.count < maxPlayers {
             players.append(Player(playerColor: availablePlayerColors[players.count]))
         }
     }
     
     func removePlayer() {
-        if players.count > 0 {
+        if players.count > minPlayers {
             players.removeLast()
         }
     }

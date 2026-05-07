@@ -8,13 +8,11 @@
 import SwiftUI
 
 struct NewGameView: View {
-    @State var game: Game
-    @State var playersCount: Int
+    @State private var viewModel: NewGameViewModel
     @Environment(\.verticalSizeClass) var sizeClass
     
     init(game: Game) {
-        self.game = game
-        self.playersCount = game.players.count
+        self.viewModel = NewGameViewModel(game: game)
     }
     
     var body: some View {
@@ -24,53 +22,69 @@ struct NewGameView: View {
                     HStack {
                         Text("Game type")
                             .fontWeight(.semibold)
-                        Picker("Game Type", selection: $game.gameType) {
+                        Picker("Game Type", selection: $viewModel.game.gameType) {
                             ForEach(GameType.allCases) { option in
                                 Text(option.rawValue)
                             }
                         }
                     }
                     .padding(10)
-                    if game.gameType == .initialPlusTurnTimerPerPlayer {
-                        InitialPlusNewGameView(initialTime: $game.initialTime, perPlayerTime: $game.perPlayerTime)
+                    if viewModel.game.gameType == .initialPlusTurnTimerPerPlayer {
+                        InitialPlusNewGameView(initialTime: $viewModel.game.initialTime, perPlayerTime: $viewModel.game.perPlayerTime)
                     } else {
                         IncrementalNewGameView()
                     }
                     VStack {
-                        Text("\(playersCount) Players")
+                        Text("\(viewModel.playersCount) Players")
                             .fontWeight(.semibold)
-                        Stepper("", value: $playersCount, in: 2...game.maxPlayers)
-                            .labelsHidden()
+                        Stepper("") {
+                            withAnimation {
+                                viewModel.addPlayer()
+                            }
+                        } onDecrement: {
+                            withAnimation {
+                                viewModel.removePlayer()
+                            }
+                        }
+                        .labelsHidden()
                     }
                     .padding(EdgeInsets(top: sizeClass == .compact ? 0 : 30, leading: 0, bottom: 10, trailing: 0))
                 } else {
                     HStack {
                         Text("Game type")
                             .fontWeight(.semibold)
-                        Picker("Game Type", selection: $game.gameType) {
+                        Picker("Game Type", selection: $viewModel.game.gameType) {
                             ForEach(GameType.allCases) { option in
                                 Text(option.rawValue)
                             }
                         }
-                        if game.gameType == .initialPlusTurnTimerPerPlayer {
-                            InitialPlusNewGameView(initialTime: $game.initialTime, perPlayerTime: $game.perPlayerTime)
+                        if viewModel.game.gameType == .initialPlusTurnTimerPerPlayer {
+                            InitialPlusNewGameView(initialTime: $viewModel.game.initialTime, perPlayerTime: $viewModel.game.perPlayerTime)
                         } else {
                             IncrementalNewGameView()
                         }
                         Spacer()
                         VStack {
-                            Text("\(playersCount) Players")
+                            Text("\(viewModel.playersCount) Players")
                                 .fontWeight(.semibold)
-                            Stepper("", value: $playersCount, in: 2...game.maxPlayers)
-                                .labelsHidden()
+                            Stepper("") {
+                                withAnimation {
+                                    viewModel.addPlayer()
+                                }
+                            } onDecrement: {
+                                withAnimation {
+                                    viewModel.removePlayer()
+                                }
+                            }
+                            .labelsHidden()
                         }
                     }
                 }
                 
                 ScrollView {
                     VStack {
-                        ForEach($game.players) { $player in
-                            SelectPlayerColorView(game: game, selected: $player.playerColor)
+                        ForEach($viewModel.game.players) { $player in
+                            SelectPlayerColorView(game: viewModel.game, selected: $player.playerColor)
                         }
                     }
                     .padding(EdgeInsets(top: 0, leading: 20, bottom: 0, trailing: 20))
@@ -81,18 +95,7 @@ struct NewGameView: View {
             .toolbar {
                 ToolbarItem(placement: .topBarTrailing) {
                     NavigationLink("Start") {
-                        GameInProgressView(game: game)
-                    }
-                }
-            }
-            .onChange(of: playersCount) { oldValue, newValue in
-                if newValue > oldValue {
-                    withAnimation {
-                        game.addPlayer()
-                    }
-                } else {
-                    withAnimation {
-                        game.removePlayer()
+                        GameInProgressView(game: viewModel.game)
                     }
                 }
             }
