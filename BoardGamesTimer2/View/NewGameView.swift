@@ -84,7 +84,7 @@ struct NewGameView: View {
                 ScrollView {
                     VStack {
                         ForEach($viewModel.game.players) { $player in
-                            SelectPlayerColorView(game: viewModel.game, selected: $player.playerColor)
+                            SelectPlayerColorView(game: viewModel.game, player: player)
                         }
                     }
                     .padding(EdgeInsets(top: 0, leading: 20, bottom: 0, trailing: 20))
