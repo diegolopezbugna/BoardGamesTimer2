@@ -8,39 +8,30 @@
 import SwiftUI
 
 struct GameInProgressView: View {
-    @Bindable var game: Game
-    @State var endConfirmating = false
-    @State var shouldNavigateToEndGame = false
+    @State private var viewModel: GameInProgressViewModel
     @Environment(\.verticalSizeClass) var sizeClass
 
     var isLandscape: Bool {
         sizeClass == .compact
     }
     
-    var rows: Int {
-        if $game.players.count < 4 {
-            isLandscape ? 1 : $game.players.count
-        } else {
-            isLandscape ? 2 : $game.players.count / 2 + $game.players.count % 2
-        }
-    }
-    var columns: Int {
-        Int(ceil(Double($game.players.count) / Double(rows)))
-    }
-
     enum NavigationDestinations {
         case gameResults
+    }
+    
+    init(game: Game) {
+        self.viewModel = GameInProgressViewModel(game: game)
     }
     
     var body: some View {
         NavigationStack {
             GeometryReader { geo in
                 let fullHeight = geo.size.height + geo.safeAreaInsets.top + geo.safeAreaInsets.bottom
-                let rowHeight = fullHeight / CGFloat(rows)
+                let rowHeight = fullHeight / CGFloat(viewModel.rows)
                 let column = GridItem(.flexible(), spacing: 0)
-                LazyVGrid(columns: Array(repeating: column, count: columns), spacing: 0) {
-                    ForEach($game.players) { player in
-                        ProgressPlayerView(game: $game, player: player)
+                LazyVGrid(columns: Array(repeating: column, count: viewModel.columns), spacing: 0) {
+                    ForEach($viewModel.game.players) { player in
+                        ProgressPlayerView(game: $viewModel.game, player: player)
                         .frame(height: rowHeight)
                     }
                 }
@@ -48,16 +39,16 @@ struct GameInProgressView: View {
                 .toolbar {
                     ToolbarItem(placement: .topBarTrailing) {
                         Button("End") {
-                            endConfirmating = true
+                            viewModel.endConfirmating = true
                         }
                     }
                 }
                 .confirmationDialog(
                     "Are you sure to end current game?",
-                    isPresented: $endConfirmating
+                    isPresented: $viewModel.endConfirmating
                 ) {
                     Button("End game", role: .confirm) {
-                        shouldNavigateToEndGame = true
+                        viewModel.shouldNavigateToEndGame = true
                     }
                     Button("Cancel", role: .cancel) { }
                 } message: {
@@ -66,12 +57,8 @@ struct GameInProgressView: View {
                 .toolbar(.hidden, for: .tabBar)
             }
         }
-        .navigationDestination(isPresented: $shouldNavigateToEndGame) {
+        .navigationDestination(isPresented: $viewModel.shouldNavigateToEndGame) {
             GameResultView()
-        }
-        .onChange(of: game.players, initial: false) { oldValue, newValue in
-            print(oldValue)
-            print(newValue)
         }
     }
 }
