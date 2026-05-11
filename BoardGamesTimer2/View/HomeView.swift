@@ -15,6 +15,7 @@ struct HomeView: View {
                 NewGameView(game: g)
             }
             Tab("Players", image: "woman-man-7") {
+                PlayersView()
             }
             Tab("Plays", image: "list-simple-star-7") {
             }
