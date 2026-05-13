@@ -1,0 +1,38 @@
+{
+  "configurations" : [
+    {
+      "id" : "FD7EAA87-1334-4ED3-B967-A2089C36E0D3",
+      "name" : "Test Scheme Action",
+      "options" : {
+
+      }
+    }
+  ],
+  "defaultOptions" : {
+    "performanceAntipatternCheckerEnabled" : true,
+    "targetForVariableExpansion" : {
+      "containerPath" : "container:BoardGamesTimer2.xcodeproj",
+      "identifier" : "4FEBC4AF2F96727E008CC060",
+      "name" : "BoardGamesTimer2"
+    }
+  },
+  "testTargets" : [
+    {
+      "parallelizable" : true,
+      "target" : {
+        "containerPath" : "container:BoardGamesTimer2.xcodeproj",
+        "identifier" : "4FEBC4BC2F967283008CC060",
+        "name" : "BoardGamesTimer2Tests"
+      }
+    },
+    {
+      "parallelizable" : true,
+      "target" : {
+        "containerPath" : "container:BoardGamesTimer2.xcodeproj",
+        "identifier" : "4FEBC4C62F967283008CC060",
+        "name" : "BoardGamesTimer2UITests"
+      }
+    }
+  ],
+  "version" : 1
+}

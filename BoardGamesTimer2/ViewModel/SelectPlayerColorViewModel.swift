@@ -32,7 +32,7 @@ class SelectPlayerColorViewModel {
     }
 
     var previousDisabled: Bool {
-        player.playerColor == game.availablePlayerColors.first
+        player.playerColor == remainingPlayerColors.first
     }
     
     func next() {
@@ -43,6 +43,6 @@ class SelectPlayerColorViewModel {
     }
     
     var nextDisabled: Bool {
-        player.playerColor == game.availablePlayerColors.last
+        player.playerColor == remainingPlayerColors.last
     }
 }
