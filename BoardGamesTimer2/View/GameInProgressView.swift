@@ -10,14 +10,15 @@ import SwiftUI
 struct GameInProgressView: View {
     @State private var viewModel: GameInProgressViewModel
     @Environment(\.verticalSizeClass) var sizeClass
-    @Environment(PlayRouter.self) private var router
+    let onEnd: () -> Void
 
     var isLandscape: Bool {
         sizeClass == .compact
     }
 
-    init(game: Game) {
+    init(game: Game, onEnd: @escaping () -> Void) {
         self.viewModel = GameInProgressViewModel(game: game)
+        self.onEnd = onEnd
     }
 
     var body: some View {
@@ -44,7 +45,7 @@ struct GameInProgressView: View {
                 isPresented: $viewModel.endConfirmating
             ) {
                 Button("End game", role: .confirm) {
-                    router.endGame()
+                    onEnd()
                 }
                 Button("Cancel", role: .cancel) { }
             } message: {
@@ -57,5 +58,5 @@ struct GameInProgressView: View {
 
 #Preview {
     var game = Game()
-    GameInProgressView(game: game)
+    GameInProgressView(game: game, onEnd: {})
 }

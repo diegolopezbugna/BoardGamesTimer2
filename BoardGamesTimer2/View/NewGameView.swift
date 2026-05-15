@@ -10,10 +10,11 @@ import SwiftUI
 struct NewGameView: View {
     @State private var viewModel: NewGameViewModel
     @Environment(\.verticalSizeClass) var sizeClass
-    @Environment(PlayRouter.self) private var router
+    let onStart: () -> Void
 
-    init(game: Game) {
+    init(game: Game, onStart: @escaping () -> Void) {
         self.viewModel = NewGameViewModel(game: game)
+        self.onStart = onStart
     }
 
     var body: some View {
@@ -95,7 +96,7 @@ struct NewGameView: View {
             .toolbar {
                 ToolbarItem(placement: .topBarTrailing) {
                     Button("Start") {
-                        router.startGame()
+                        onStart()
                     }
                 }
             }
@@ -105,5 +106,5 @@ struct NewGameView: View {
 
 #Preview {
     let g = Game()
-    NewGameView(game: g)
+    NewGameView(game: g, onStart: {})
 }

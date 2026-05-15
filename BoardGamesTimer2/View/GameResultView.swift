@@ -8,19 +8,20 @@
 import SwiftUI
 
 struct GameResultView: View {
-    @Environment(PlayRouter.self) private var router
+    let onNewGame: () -> Void
 
     var body: some View {
         VStack(spacing: 20) {
             Text("Game Over")
                 .font(.largeTitle)
             Button("New Game") {
-                router.newGame()
+                onNewGame()
             }
         }
+        .navigationBarBackButtonHidden()
     }
 }
 
 #Preview {
-    GameResultView()
+    GameResultView(onNewGame: {})
 }
