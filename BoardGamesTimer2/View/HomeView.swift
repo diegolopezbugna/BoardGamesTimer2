@@ -8,11 +8,24 @@
 import SwiftUI
 
 struct HomeView: View {
+    @State private var playRouter = PlayRouter()
+
     var body: some View {
         TabView {
             Tab("Play", image: "clock-timer-7") {
-                let g = Game()
-                NewGameView(game: g)
+                NavigationStack(path: $playRouter.path) {
+                    NewGameView(game: playRouter.game)
+                        .navigationDestination(for: PlayRoute.self) { route in
+                            switch route {
+                            case .gameInProgress:
+                                GameInProgressView(game: playRouter.game)
+                            case .gameResult:
+                                GameResultView()
+                            }
+                        }
+                }
+                .id(ObjectIdentifier(playRouter.game))
+                .environment(playRouter)
             }
             Tab("Players", image: "woman-man-7") {
                 PlayersView()

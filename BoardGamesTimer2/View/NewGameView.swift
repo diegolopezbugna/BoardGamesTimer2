@@ -10,13 +10,13 @@ import SwiftUI
 struct NewGameView: View {
     @State private var viewModel: NewGameViewModel
     @Environment(\.verticalSizeClass) var sizeClass
-    
+    @Environment(PlayRouter.self) private var router
+
     init(game: Game) {
         self.viewModel = NewGameViewModel(game: game)
     }
-    
+
     var body: some View {
-        NavigationStack{
             VStack {
                 if sizeClass == .regular {
                     HStack {
@@ -94,13 +94,12 @@ struct NewGameView: View {
             .navigationTitle("New Game")
             .toolbar {
                 ToolbarItem(placement: .topBarTrailing) {
-                    NavigationLink("Start") {
-                        GameInProgressView(game: viewModel.game)
+                    Button("Start") {
+                        router.startGame()
                     }
                 }
             }
             .padding(sizeClass == .compact ? 0 : 20)
-        }
     }
 }
 

@@ -24,11 +24,6 @@ struct GameInProgressViewModelTests {
         #expect(!vm.endConfirmating)
     }
 
-    @Test func initialShouldNavigateToEndGameIsFalse() {
-        let vm = makeViewModel(playerCount: 4, isLandscape: false)
-        #expect(!vm.shouldNavigateToEndGame)
-    }
-
     @Test func isLandscapeToggleUpdatesGrid() {
         let vm = makeViewModel(playerCount: 4, isLandscape: false)
         #expect(vm.rows == 2)

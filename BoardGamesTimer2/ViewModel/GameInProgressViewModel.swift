@@ -11,7 +11,6 @@ import Foundation
 class GameInProgressViewModel {
     var game: Game
     var endConfirmating = false
-    var shouldNavigateToEndGame = false
     var isLandscape = false
 
     var rows: Int {
