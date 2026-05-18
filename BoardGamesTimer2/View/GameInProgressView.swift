@@ -8,41 +8,40 @@
 import SwiftUI
 
 struct GameInProgressView: View {
-    @State private var viewModel: GameInProgressViewModel
-    @Environment(\.verticalSizeClass) var sizeClass
+    let store: GameStore
     let onEnd: () -> Void
+    @Environment(\.verticalSizeClass) var sizeClass
 
     var isLandscape: Bool {
         sizeClass == .compact
     }
 
-    init(game: Game, onEnd: @escaping () -> Void) {
-        self.viewModel = GameInProgressViewModel(game: game)
-        self.onEnd = onEnd
-    }
-
     var body: some View {
+        let layout = store.state.gridLayout(isLandscape: isLandscape)
         GeometryReader { geo in
             let fullHeight = geo.size.height + geo.safeAreaInsets.top + geo.safeAreaInsets.bottom
-            let rowHeight = fullHeight / CGFloat(viewModel.rows)
+            let rowHeight = fullHeight / CGFloat(layout.rows)
             let column = GridItem(.flexible(), spacing: 0)
-            LazyVGrid(columns: Array(repeating: column, count: viewModel.columns), spacing: 0) {
-                ForEach($viewModel.game.players) { player in
-                    ProgressPlayerView(game: $viewModel.game, player: player)
-                    .frame(height: rowHeight)
+            LazyVGrid(columns: Array(repeating: column, count: layout.columns), spacing: 0) {
+                ForEach(store.state.players) { playerState in
+                    ProgressPlayerView(store: store, playerID: playerState.id)
+                        .frame(height: rowHeight)
                 }
             }
             .edgesIgnoringSafeArea(.all)
             .toolbar {
                 ToolbarItem(placement: .topBarTrailing) {
                     Button("End") {
-                        viewModel.endConfirmating = true
+                        store.send(.requestEndGame)
                     }
                 }
             }
             .confirmationDialog(
                 "Are you sure to end current game?",
-                isPresented: $viewModel.endConfirmating
+                isPresented: Binding(
+                    get: { store.state.endConfirmating },
+                    set: { if !$0 { store.send(.cancelEndGame) } }
+                )
             ) {
                 Button("End game", role: .confirm) {
                     onEnd()
@@ -57,6 +56,5 @@ struct GameInProgressView: View {
 }
 
 #Preview {
-    var game = Game()
-    GameInProgressView(game: game, onEnd: {})
+    GameInProgressView(store: GameStore(), onEnd: {})
 }

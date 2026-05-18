@@ -8,38 +8,50 @@
 import SwiftUI
 
 struct SelectPlayerColorView: View {
-    @State private var viewModel: SelectPlayerColorViewModel
-    
-    init(game: Game, player: Player) {
-        self.viewModel = SelectPlayerColorViewModel(game: game, player: player)
+    let store: GameStore
+    let playerID: UUID
+
+    private var playerState: PlayerState? {
+        store.state.players.first { $0.id == playerID }
     }
-    
+
+    private var remainingColors: [PlayerColor] {
+        store.state.remainingColors(for: playerID)
+    }
+
+    private var previousDisabled: Bool {
+        playerState?.playerColor == remainingColors.first
+    }
+
+    private var nextDisabled: Bool {
+        playerState?.playerColor == remainingColors.last
+    }
+
     var body: some View {
         HStack {
             Button("<") {
                 withAnimation(.linear(duration: 0.1)) {
-                    viewModel.previous()
+                    store.send(.selectPreviousColor(playerID: playerID))
                 }
             }
             .fontWeight(.bold)
-            .disabled(viewModel.previousDisabled)
+            .disabled(previousDisabled)
             RoundedRectangle(cornerRadius: 5)
-                .fill(viewModel.player.playerColor.bgColor)
+                .fill(playerState?.playerColor.bgColor ?? .gray)
                 .stroke(.black, lineWidth: 2)
                 .frame(height: 35)
-
             Button(">") {
                 withAnimation(.linear(duration: 0.1)) {
-                    viewModel.next()
+                    store.send(.selectNextColor(playerID: playerID))
                 }
             }
             .fontWeight(.bold)
-            .disabled(viewModel.nextDisabled)
+            .disabled(nextDisabled)
         }
     }
 }
 
 #Preview {
-    let g = Game()
-    SelectPlayerColorView(game: g, player: g.players[0])
+    let store = GameStore()
+    SelectPlayerColorView(store: store, playerID: store.state.players[0].id)
 }

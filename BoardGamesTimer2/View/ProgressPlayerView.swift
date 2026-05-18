@@ -6,52 +6,52 @@
 //
 
 import SwiftUI
-internal import Combine
 
 struct ProgressPlayerView: View {
-    @Binding var game: Game
-    @Binding var player: Player
-    @State var bgColor: Color
+    let store: GameStore
+    let playerID: UUID
+    @State private var bgColor: Color
 
-    let timer = Timer.publish(every: 1, on: .main, in: .common).autoconnect()
-    
+    private var player: PlayerState? {
+        store.state.players.first { $0.id == playerID }
+    }
+
+    init(store: GameStore, playerID: UUID) {
+        self.store = store
+        self.playerID = playerID
+        let initialColor = store.state.players
+            .first { $0.id == playerID }?
+            .playerColor.bgColor ?? .gray
+        self._bgColor = State(initialValue: initialColor)
+    }
+
     var body: some View {
         ZStack {
             Rectangle()
                 .fill(bgColor)
-            Text("\(player.time.toString(showMs: false))")
-                .foregroundStyle(player.playerColor.textColor)
+            Text(player?.time.toString(showMs: false) ?? "")
+                .foregroundStyle(player?.playerColor.textColor ?? .white)
                 .font(.custom("Verdana", size: 44))
-                .onReceive(timer) { output in
-                    if player.isPlaying {
-                        player.time += game.gameType == .incremental ? 1.0 : -1.0
-                        withAnimation(.linear(duration: 0.5), ) {
-                            self.bgColor = player.playerColor.bgColor2
-                        } completion: {
-                            withAnimation(.linear(duration: 0.5)) {
-                                self.bgColor = player.playerColor.bgColor
-                            }
-                        }
-                    }
-                }
         }
         .onTapGesture {
-            if player.isPlaying {
-                player.isPlaying = false
-            } else {
-                game.changePlayingPlayer(player)
+            store.send(.playerTapped(playerID: playerID))
+        }
+        .onChange(of: player?.time) { _, _ in
+            guard player?.isPlaying == true else { return }
+            let baseColor = player?.playerColor.bgColor ?? .gray
+            let pulseColor = player?.playerColor.bgColor2 ?? .gray
+            withAnimation(.linear(duration: 0.5)) {
+                bgColor = pulseColor
+            } completion: {
+                withAnimation(.linear(duration: 0.5)) {
+                    bgColor = baseColor
+                }
             }
         }
-    }
-    
-    init(game: Binding<Game>, player: Binding<Player>) {
-        self._game = game
-        self._player = player
-        self.bgColor = player.playerColor.bgColor.wrappedValue
     }
 }
 
 #Preview {
-    var g = Game()
-    ProgressPlayerView(game: .constant(g), player: .constant(g.players[0]))
+    let store = GameStore()
+    ProgressPlayerView(store: store, playerID: store.state.players[0].id)
 }

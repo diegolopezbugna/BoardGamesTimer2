@@ -25,6 +25,5 @@ struct HomeView: View {
 }
 
 #Preview {
-    let g = Game()
     HomeView()
 }
