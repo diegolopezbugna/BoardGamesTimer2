@@ -38,6 +38,7 @@ struct NewGameView: View {
                     VStack {
                         Text("\(viewModel.playersCount) Players")
                             .fontWeight(.semibold)
+                            .contentTransition(.numericText())
                         Stepper("") {
                             withAnimation {
                                 viewModel.addPlayer()
@@ -68,6 +69,7 @@ struct NewGameView: View {
                         VStack {
                             Text("\(viewModel.playersCount) Players")
                                 .fontWeight(.semibold)
+                                .contentTransition(.numericText())
                             Stepper("") {
                                 withAnimation {
                                     viewModel.addPlayer()
