@@ -17,8 +17,7 @@ struct ProgressPlayerView: View {
     
     var body: some View {
         ZStack {
-            Rectangle()
-                .fill(bgColor)
+            Color(bgColor)
             Text("\(player.time.toString(showMs: false))")
                 .foregroundStyle(player.playerColor.textColor)
                 .font(.custom("Verdana", size: 44))

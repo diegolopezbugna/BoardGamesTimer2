@@ -32,7 +32,7 @@ struct GameInProgressView: View {
                     .frame(height: rowHeight)
                 }
             }
-            .edgesIgnoringSafeArea(.all)
+            .ignoresSafeArea()
             .toolbar {
                 ToolbarItem(placement: .topBarTrailing) {
                     Button("End") {
