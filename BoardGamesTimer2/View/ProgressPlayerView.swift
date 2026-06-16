@@ -13,7 +13,8 @@ struct ProgressPlayerView: View {
     @Binding var player: Player
     @State var bgColor: Color
 
-    let timer = Timer.publish(every: 1, on: .main, in: .common).autoconnect()
+    @State private var timer = Timer.publish(every: 1, on: .main, in: .common)
+    @State private var timerHandler: Cancellable?
     
     var body: some View {
         ZStack {
@@ -23,22 +24,48 @@ struct ProgressPlayerView: View {
                 .font(.custom("Verdana", size: 44))
                 .onReceive(timer) { output in
                     if player.isPlaying {
-                        player.time += game.gameType == .incremental ? 1.0 : -1.0
-                        withAnimation(.linear(duration: 0.5), ) {
-                            self.bgColor = player.playerColor.bgColor2
-                        } completion: {
-                            withAnimation(.linear(duration: 0.5)) {
-                                self.bgColor = player.playerColor.bgColor
-                            }
-                        }
+                        updatePlayerTime()
+                        animateBackground()
                     }
                 }
         }
+        .onDisappear {
+            cancelTimer()
+            player.isPlaying = false
+        }
         .onTapGesture {
             if player.isPlaying {
+                cancelTimer()
                 player.isPlaying = false
             } else {
+                updatePlayerTime()
+                animateBackground()
+                setTimer()
                 game.changePlayingPlayer(player)
+            }
+        }
+    }
+    
+    func setTimer() {
+        timerHandler?.cancel()
+        timer = Timer.publish(every: 1, on: .main, in: .common)
+        timerHandler = timer.connect()
+    }
+    
+    func cancelTimer() {
+      timerHandler?.cancel()
+    }
+    
+    func updatePlayerTime() {
+        player.time += game.gameType == .incremental ? 1.0 : -1.0
+    }
+    
+    func animateBackground() {
+        withAnimation(.linear(duration: 0.5), ) {
+            self.bgColor = player.playerColor.bgColor2
+        } completion: {
+            withAnimation(.linear(duration: 0.5)) {
+                self.bgColor = player.playerColor.bgColor
             }
         }
     }
