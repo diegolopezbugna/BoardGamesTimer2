@@ -37,7 +37,7 @@ class Game : Equatable {
         PlayerColor(name: "Blanco", textColor: Color.black, bgColor: Color.white, bgColor2: Color(red: 0.6, green: 0.6, blue: 0.6)),
         PlayerColor(name: "Naranja", textColor: Color.white, bgColor: Color.orange, bgColor2: Color(red: 0.6, green: 0.3, blue: 0)),
         PlayerColor(name: "Violeta", textColor: Color.white, bgColor: Color.purple, bgColor2: Color(red: 0.9, green: 0, blue: 0.9)),
-        PlayerColor(name: "Marrón", textColor: Color.white, bgColor: Color.brown, bgColor2: Color(red: 0.9, green: 0.7, blue: 0.5)),
+        PlayerColor(name: "Marrón", textColor: Color.white, bgColor: Color.brown, bgColor2: Color(red: 0.9, green: 0.7, blue: 0.5))
         ]
 
     var players: [Player]
