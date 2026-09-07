@@ -83,7 +83,7 @@ struct NewGameView: View {
                         }
                     }
                 }
-                
+
                 ScrollView {
                     VStack {
                         ForEach($viewModel.game.players) { $player in
@@ -107,6 +107,6 @@ struct NewGameView: View {
 }
 
 #Preview {
-    let g = Game()
-    NewGameView(game: g, onStart: {})
+    let game = Game()
+    NewGameView(game: game, onStart: {})
 }

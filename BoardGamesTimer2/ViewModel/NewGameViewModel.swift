@@ -18,11 +18,11 @@ class NewGameViewModel {
     init(game: Game) {
         self.game = game
     }
-    
+
     func addPlayer() {
         self.game.addPlayer()
     }
-    
+
     func removePlayer() {
         self.game.removePlayer()
     }

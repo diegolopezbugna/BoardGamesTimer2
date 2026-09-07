@@ -8,7 +8,7 @@ import Foundation
 
 enum GameType: String, CaseIterable, Identifiable {
     var id: Self { self }
-    
+
     case incremental = "Incremental"
     case initialPlusTurnTimerPerPlayer = "Initial + turn"
 }

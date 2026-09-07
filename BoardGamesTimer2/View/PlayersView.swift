@@ -24,7 +24,7 @@ struct PlayersView: View {
                 playbackMode = LottiePlaybackMode.paused
             }
         }
-        .onAppear() {
+        .onAppear {
             playbackMode = LottiePlaybackMode.playing(.fromProgress(0, toProgress: 1, loopMode: .playOnce))
         }
     }

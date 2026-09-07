@@ -7,9 +7,9 @@
 import Foundation
 import SwiftUI
 
-struct PlayerColor : Identifiable, Equatable {
+struct PlayerColor: Identifiable, Equatable {
     let id: UUID = UUID()
-    
+
     var name: String
     var textColor: Color
     var bgColor: Color
@@ -19,10 +19,10 @@ struct PlayerColor : Identifiable, Equatable {
 @Observable
 class Game {
     var gameType: GameType = .incremental
-    
+
     var initialTime = InitialPlusTurnTimerPerPlayerGameType.defaultInitialTime
     var perPlayerTime = InitialPlusTurnTimerPerPlayerGameType.defaultPerPlayerTime
-    
+
     let availablePlayerColors = [
         PlayerColor(name: "Red", textColor: Color.white, bgColor: Color(red: 0.6, green: 0, blue: 0), bgColor2: Color(red: 1, green: 0, blue: 0)),
         PlayerColor(name: "Green", textColor: Color.white, bgColor: Color(red: 0, green: 0.5, blue: 0), bgColor2: Color(red: 0, green: 0.9, blue: 0)),
@@ -32,11 +32,11 @@ class Game {
         PlayerColor(name: "White", textColor: Color.black, bgColor: Color.white, bgColor2: Color(red: 0.6, green: 0.6, blue: 0.6)),
         PlayerColor(name: "Orange", textColor: Color.white, bgColor: Color.orange, bgColor2: Color(red: 0.6, green: 0.3, blue: 0)),
         PlayerColor(name: "Purple", textColor: Color.white, bgColor: Color.purple, bgColor2: Color(red: 0.9, green: 0, blue: 0.9)),
-        PlayerColor(name: "Brown", textColor: Color.white, bgColor: Color.brown, bgColor2: Color(red: 0.9, green: 0.7, blue: 0.5)),
+        PlayerColor(name: "Brown", textColor: Color.white, bgColor: Color.brown, bgColor2: Color(red: 0.9, green: 0.7, blue: 0.5))
         ]
-    
+
     var players: [Player]
-    
+
     let minPlayers = 2
     let maxPlayers = 8
 
@@ -52,13 +52,13 @@ class Game {
             players.append(Player(playerColor: availablePlayerColors[players.count]))
         }
     }
-    
+
     func removePlayer() {
         if players.count > minPlayers {
             players.removeLast()
         }
     }
-    
+
     func changePlayingPlayer(_ player: Player) {
         players.forEach { player in
             player.isPlaying = false
