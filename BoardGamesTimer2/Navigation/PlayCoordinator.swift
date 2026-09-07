@@ -25,6 +25,6 @@ struct PlayCoordinator: View {
     }
 
     private func startGame() { path.append(PlayRoute.gameInProgress) }
-    private func endGame()   { path.append(PlayRoute.gameResult) }
-    private func newGame()   { path = NavigationPath(); game = Game() }
+    private func endGame() { path.append(PlayRoute.gameResult) }
+    private func newGame() { path = NavigationPath(); game = Game() }
 }

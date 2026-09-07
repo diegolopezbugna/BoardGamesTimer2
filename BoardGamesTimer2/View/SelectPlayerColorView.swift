@@ -9,11 +9,11 @@ import SwiftUI
 
 struct SelectPlayerColorView: View {
     @State private var viewModel: SelectPlayerColorViewModel
-    
+
     init(game: Game, player: Player) {
         self.viewModel = SelectPlayerColorViewModel(game: game, player: player)
     }
-    
+
     var body: some View {
         HStack {
             Button("<") {
@@ -40,6 +40,6 @@ struct SelectPlayerColorView: View {
 }
 
 #Preview {
-    let g = Game()
-    SelectPlayerColorView(game: g, player: g.players[0])
+    let game = Game()
+    SelectPlayerColorView(game: game, player: game.players[0])
 }

@@ -8,9 +8,9 @@ import Foundation
 import SwiftUI
 import Observation
 
-struct PlayerColor : Identifiable, Equatable {
+struct PlayerColor: Identifiable, Equatable {
     let id: UUID = UUID()
-    
+
     var name: String
     var textColor: Color
     var bgColor: Color
@@ -24,10 +24,10 @@ class Game : Equatable {
     }
     
     var gameType: GameType = .incremental
-    
+
     var initialTime = InitialPlusTurnTimerPerPlayerGameType.defaultInitialTime
     var perPlayerTime = InitialPlusTurnTimerPerPlayerGameType.defaultPerPlayerTime
-    
+
     let availablePlayerColors = [
         PlayerColor(name: "Rojo", textColor: Color.white, bgColor: Color(red: 0.6, green: 0, blue: 0), bgColor2: Color(red: 1, green: 0, blue: 0)),
         PlayerColor(name: "Verde", textColor: Color.white, bgColor: Color(red: 0, green: 0.5, blue: 0), bgColor2: Color(red: 0, green: 0.9, blue: 0)),
@@ -39,9 +39,9 @@ class Game : Equatable {
         PlayerColor(name: "Violeta", textColor: Color.white, bgColor: Color.purple, bgColor2: Color(red: 0.9, green: 0, blue: 0.9)),
         PlayerColor(name: "Marrón", textColor: Color.white, bgColor: Color.brown, bgColor2: Color(red: 0.9, green: 0.7, blue: 0.5)),
         ]
-    
+
     var players: [Player]
-    
+
     let minPlayers = 2
     let maxPlayers = 8
 
@@ -57,13 +57,13 @@ class Game : Equatable {
             players.append(Player(playerColor: availablePlayerColors[players.count]))
         }
     }
-    
+
     func removePlayer() {
         if players.count > minPlayers {
             players.removeLast()
         }
     }
-    
+
     func changePlayingPlayer(_ player: Player) {
         players.forEach { player in
             player.isPlaying = false

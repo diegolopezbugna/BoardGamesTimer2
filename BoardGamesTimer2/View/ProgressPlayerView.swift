@@ -15,14 +15,14 @@ struct ProgressPlayerView: View {
 
     @State private var timer = Timer.publish(every: 1, on: .main, in: .common)
     @State private var timerHandler: Cancellable?
-    
+
     var body: some View {
         ZStack {
             Color(bgColor)
             Text("\(player.time.toString(showMs: false))")
                 .foregroundStyle(player.playerColor.textColor)
                 .font(.custom("Verdana", size: 44))
-                .onReceive(timer) { output in
+                .onReceive(timer) { _ in
                     if player.isPlaying {
                         updatePlayerTime()
                         animateBackground()
@@ -78,7 +78,7 @@ struct ProgressPlayerView: View {
             }
         }
     }
-    
+
     init(game: Binding<Game>, player: Binding<Player>) {
         self._game = game
         self._player = player
@@ -87,6 +87,6 @@ struct ProgressPlayerView: View {
 }
 
 #Preview {
-    var g = Game()
-    ProgressPlayerView(game: .constant(g), player: .constant(g.players[0]))
+    var game = Game()
+    ProgressPlayerView(game: .constant(game), player: .constant(game.players[0]))
 }

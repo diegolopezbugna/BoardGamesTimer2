@@ -19,12 +19,12 @@ class SelectPlayerColorViewModel {
             !game.players.map(\.playerColor).contains(pc) || pc == player.playerColor
         }
     }
-    
+
     init(game: Game, player: Player) {
         self.game = game
         self.player = player
     }
-    
+
     func previous() {
         let i = remainingPlayerColors.firstIndex(of: player.playerColor) ?? 0
         if i > 0 {
@@ -35,14 +35,14 @@ class SelectPlayerColorViewModel {
     var previousDisabled: Bool {
         player.playerColor == remainingPlayerColors.first
     }
-    
+
     func next() {
         let i = remainingPlayerColors.firstIndex(of: player.playerColor) ?? 0
         if i < remainingPlayerColors.count - 1 {
             player.playerColor = remainingPlayerColors[i + 1]
         }
     }
-    
+
     var nextDisabled: Bool {
         player.playerColor == remainingPlayerColors.last
     }
