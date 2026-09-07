@@ -11,7 +11,8 @@ import NaturalLanguage
 
 extension SpeechAnalyzeManager {
     static let defaultLocale = Locale(identifier: "es-AR")
-
+    
+    // swiftlint:disable:next type_name
     enum _Error: Error {
         case failToCreateAudioCapturer
         case failToCreateTranscriber

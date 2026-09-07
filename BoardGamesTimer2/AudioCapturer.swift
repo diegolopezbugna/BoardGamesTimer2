@@ -13,6 +13,7 @@ extension AudioCapturer {
         case started, paused, stopped
     }
 
+    // swiftlint:disable:next type_name
     enum _Error: Error {
         case permissionDenied
         case unknownPermission

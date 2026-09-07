@@ -9,6 +9,7 @@ import SwiftUI
 import Speech
 
 extension Transcriber {
+    // swiftlint:disable:next type_name
     enum _Error: Error {
         case notAvailable
         case localeNotSupported
