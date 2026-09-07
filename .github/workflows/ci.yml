@@ -14,7 +14,7 @@ jobs:
       - name: Run SwiftLint
         run: |
           brew install swiftlint
-          swiftlint lint -reporter github-actions-logging
+          swiftlint lint --reporter github-actions-logging
 
   build-and-test:
     name: Build & Test
