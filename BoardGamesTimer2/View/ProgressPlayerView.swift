@@ -30,37 +30,46 @@ struct ProgressPlayerView: View {
                 }
         }
         .onDisappear {
-            cancelTimer()
             player.isPlaying = false
         }
         .onTapGesture {
             if player.isPlaying {
-                cancelTimer()
                 player.isPlaying = false
             } else {
-                updatePlayerTime()
-                animateBackground()
-                setTimer()
                 game.changePlayingPlayer(player)
             }
         }
+        .onChange(of: player.isPlaying) { oldValue, newValue in
+//            print("Player \(player.playerColor.name) isPlaying: \(newValue)")
+            onPlayerIsPlayingChanged(isPlaying: newValue)
+        }
     }
     
-    func setTimer() {
+    private func onPlayerIsPlayingChanged(isPlaying: Bool) {
+        if isPlaying {
+            updatePlayerTime()
+            animateBackground()
+            setTimer()
+        } else {
+            cancelTimer()
+        }
+    }
+    
+    private func setTimer() {
         timerHandler?.cancel()
         timer = Timer.publish(every: 1, on: .main, in: .common)
         timerHandler = timer.connect()
     }
     
-    func cancelTimer() {
+    private func cancelTimer() {
       timerHandler?.cancel()
     }
     
-    func updatePlayerTime() {
+    private func updatePlayerTime() {
         player.time += game.gameType == .incremental ? 1.0 : -1.0
     }
     
-    func animateBackground() {
+    private func animateBackground() {
         withAnimation(.linear(duration: 0.5), ) {
             self.bgColor = player.playerColor.bgColor2
         } completion: {

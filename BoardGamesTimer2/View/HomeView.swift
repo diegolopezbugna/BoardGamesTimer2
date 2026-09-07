@@ -17,6 +17,7 @@ struct HomeView: View {
                 PlayersView()
             }
             Tab("Plays", image: "list-simple-star-7") {
+                //SpeechView()
             }
             Tab("Settings", image: "spanner-7") {
             }
