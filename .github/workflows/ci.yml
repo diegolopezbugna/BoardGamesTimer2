@@ -30,17 +30,17 @@ jobs:
         uses: actions/cache@v4
         with:
           path: ~/Library/Developer/Xcode/DerivedData/**/SourcePackages
-          key: ${{ runner.os }}-spm-${{ hashFiles('BoardGamesTimer2/BoardGamesTimer2.xcodeproj/project.xcworkspace/xcshareddata/swiftpm/Package.resolved') }}
+          key: ${{ runner.os }}-spm-${{ hashFiles('BoardGamesTimer2.xcodeproj/project.xcworkspace/xcshareddata/swiftpm/Package.resolved') }}
           restore-keys: |
             ${{ runner.os }}-spm-
 
       - name: Resolve SPM packages
-        run: xcodebuild -resolvePackageDependencies -project BoardGamesTimer2/BoardGamesTimer2.xcodeproj -scheme BoardGamesTimer2
+        run: xcodebuild -resolvePackageDependencies -project BoardGamesTimer2.xcodeproj -scheme BoardGamesTimer2
 
       - name: Build
         run: |
           xcodebuild build \
-            -project BoardGamesTimer2/BoardGamesTimer2.xcodeproj \
+            -project BoardGamesTimer2.xcodeproj \
             -scheme BoardGamesTimer2 \
             -destination 'platform=iOS Simulator,name=iPhone 16,OS=latest' \
             | xcbeautify
@@ -48,7 +48,7 @@ jobs:
       - name: Run tests
         run: |
           xcodebuild test \
-            -project BoardGamesTimer2/BoardGamesTimer2.xcodeproj \
+            -project BoardGamesTimer2.xcodeproj \
             -scheme BoardGamesTimer2 \
             -destination 'platform=iOS Simulator,name=iPhone 16,OS=latest' \
             -resultBundlePath TestResults \
